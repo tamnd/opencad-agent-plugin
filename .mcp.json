@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "opencad": {
+      "type": "stdio",
+      "command": "${CLAUDE_PLUGIN_ROOT}/bin/opencad-launch",
+      "args": ["mcp", "--project", "${CLAUDE_PROJECT_DIR:-.}"],
+      "timeout": 600000
+    }
+  }
+}

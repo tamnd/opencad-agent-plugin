@@ -1,0 +1,11 @@
+{
+  "target": "bracket.ocl",
+  "profile": "standard",
+  "status": "ok",
+  "checks": [
+    { "message": "R4 wall for an M5 screw", "status": "pass" },
+    { "message": "R1 mass in 6061 aluminium", "status": "pass" },
+    { "message": "R2 width", "status": "pass" },
+    { "message": "R3 height", "status": "pass" }
+  ]
+}

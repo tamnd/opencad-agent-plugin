@@ -1,0 +1,64 @@
+#!/bin/sh
+# Finds the opencadd that this plugin pins, or downloads it, checks its SHA-256 and runs it with the
+# arguments. Section 4.3 of spec/ai/mcp/10-skills-plugins-distribution.md gives the order:
+#
+# 1. $OPENCAD_BIN, when it is set.
+# 2. opencadd on the PATH, when its version is the version of the plugin.
+# 3. The release binary for this system, from the cache of the user or downloaded into it. Its
+#    SHA-256 must be the value in bin/opencadd.sha256, each time it runs.
+#
+# Each error is one line on stderr and the exit code 1, so the host shows a useful message.
+# OPENCAD_RELEASES changes the address of the releases, for a mirror of an air-gapped site.
+set -eu
+version="0.8.4"
+fail() {
+	printf 'opencad-launch: %s\n' "$1" >&2
+	exit 1
+}
+if [ -n "${OPENCAD_BIN:-}" ]; then
+	[ -x "$OPENCAD_BIN" ] || fail "OPENCAD_BIN is $OPENCAD_BIN, and that is not a program"
+	exec "$OPENCAD_BIN" "$@"
+fi
+if command -v opencadd >/dev/null 2>&1; then
+	if [ "$(opencadd --version 2>/dev/null || true)" = "opencadd $version" ]; then
+		exec opencadd "$@"
+	fi
+fi
+case "$(uname -s)-$(uname -m)" in
+Linux-x86_64) platform=linux-x86_64 ;;
+Linux-aarch64 | Linux-arm64) platform=linux-aarch64 ;;
+Darwin-arm64) platform=macos-aarch64 ;;
+Darwin-x86_64) platform=macos-x86_64 ;;
+*) fail "there is no opencadd $version for $(uname -s) $(uname -m). Install it and set OPENCAD_BIN" ;;
+esac
+root=$(CDPATH='' cd -- "$(dirname -- "$0")/.." && pwd)
+file="opencadd-$version-$platform"
+want=$(awk -v f="$file" '$2 == f { print $1 }' "$root/bin/opencadd.sha256" 2>/dev/null || true)
+[ -n "$want" ] || fail "this plugin has no checksum for $file. Install opencadd $version and set OPENCAD_BIN"
+sha256() {
+	if command -v sha256sum >/dev/null 2>&1; then
+		sha256sum "$1" | cut -d ' ' -f 1
+	else
+		shasum -a 256 "$1" | cut -d ' ' -f 1
+	fi
+}
+cache="${XDG_CACHE_HOME:-$HOME/.cache}/opencad/bin"
+bin="$cache/$file"
+if [ -f "$bin" ] && [ "$(sha256 "$bin")" = "$want" ]; then
+	exec "$bin" "$@"
+fi
+url="${OPENCAD_RELEASES:-https://github.com/tamnd/opencad/releases/download}/v$version/$file"
+mkdir -p "$cache" || fail "cannot make the folder $cache"
+part="$bin.part.$$"
+trap 'rm -f "$part"' EXIT
+if command -v curl >/dev/null 2>&1; then
+	curl -fsSL --retry 2 -o "$part" "$url" 2>/dev/null || fail "cannot download $url. Check the network, or install opencadd $version and set OPENCAD_BIN"
+else
+	wget -q -O "$part" "$url" 2>/dev/null || fail "cannot download $url. Check the network, or install opencadd $version and set OPENCAD_BIN"
+fi
+got=$(sha256 "$part")
+[ "$got" = "$want" ] || fail "the SHA-256 of $file is $got, but the plugin pins $want. The file is not the release, so it does not run"
+chmod +x "$part"
+mv -f "$part" "$bin"
+trap - EXIT
+exec "$bin" "$@"

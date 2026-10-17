@@ -1,0 +1,19 @@
+{
+  "name": "opencad",
+  "owner": {
+    "name": "OpenCAD",
+    "url": "https://github.com/tamnd/opencad"
+  },
+  "metadata": {
+    "description": "The OpenCAD plugin for Claude Code and Codex."
+  },
+  "plugins": [
+    {
+      "name": "opencad",
+      "source": "./",
+      "description": "Parametric CAD for agents. The OpenCAD MCP server builds, checks, renders and measures OCL models, and the skills give the procedure to design a part or an assembly.",
+      "version": "0.8.4",
+      "category": "design"
+    }
+  ]
+}

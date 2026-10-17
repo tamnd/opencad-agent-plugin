@@ -1,0 +1,13 @@
+{
+  "name": "opencad",
+  "version": "0.8.4",
+  "description": "Parametric CAD for agents. The OpenCAD MCP server builds, checks, renders and measures OCL models, and the skills give the procedure to design a part or an assembly.",
+  "author": {
+    "name": "OpenCAD",
+    "url": "https://github.com/tamnd/opencad"
+  },
+  "homepage": "https://github.com/tamnd/opencad",
+  "repository": "https://github.com/tamnd/opencad-agent-plugin",
+  "license": "Apache-2.0",
+  "keywords": ["cad", "mcp", "ocl", "mechanical-design"]
+}

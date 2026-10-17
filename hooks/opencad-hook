@@ -1,0 +1,14 @@
+#!/bin/sh
+# Runs one hook of the plugin: `opencad-hook NAME [--host codex]` runs `opencadd hook NAME`
+# through the launcher, with the tool call of the host on stdin.
+#
+# In Claude Code the hooks act only when OPENCAD_HOOKS is 1, because section 4.4 of the spec keeps
+# them off until the user turns them on. Codex asks the user to trust the hooks of a plugin before
+# they run, and that is the step that turns them on there.
+set -eu
+case " $* " in
+*" --host codex "*) ;;
+*) [ "${OPENCAD_HOOKS:-0}" = 1 ] || exit 0 ;;
+esac
+here=$(CDPATH='' cd -- "$(dirname -- "$0")" && pwd)
+exec "$here/../bin/opencad-launch" hook "$@"

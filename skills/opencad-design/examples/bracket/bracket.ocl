@@ -1,0 +1,51 @@
+ocl 1.0
+
+param thickness: Length = 4 mm @range(3 mm, 8 mm)
+param width: Length = 60 mm @range(40 mm, 100 mm)
+
+part bracket {
+  requires thickness >= 3 mm, "R4 wall for an M5 screw"
+  sketch profile on YZ {
+    o = point(0 mm, 0 mm) fixed
+    a = point(40 mm, 0 mm)
+    b = point(40 mm, 4 mm)
+    c = point(4 mm, 4 mm)
+    d = point(4 mm, 50 mm)
+    e = point(0 mm, 50 mm)
+    base = line(o, a)
+    toe = line(a, b)
+    shelf = line(b, c)
+    riser = line(c, d)
+    cap = line(d, e)
+    back = line(e, o)
+    horizontal(base, shelf, cap)
+    vertical(toe, riser, back)
+    dim distance(o, a) = 40 mm
+    dim distance(o, e) = 50 mm
+    dim distance(a, b) = thickness
+    dim distance(d, e) = thickness
+  }
+  body = extrude(profile.region, symmetric(width))
+  corner = fillet(body.edges.lateral(profile.c), r = 6 mm)
+  sketch floor on plane(XY, offset = thickness) {
+    p1 = point(-18 mm, 28 mm) fixed
+    p2 = point(18 mm, 28 mm) fixed
+    h1 = circle(center = p1, r = 2.75 mm)
+    h2 = circle(center = p2, r = 2.75 mm)
+    dim diameter(h1) = 5.5 mm
+    dim diameter(h2) = 5.5 mm
+  }
+  floor_holes = hole(profile = floor, into = corner, dia = 5.5 mm, depth = through_all)
+  sketch wall on XZ {
+    q1 = point(-18 mm, 36 mm) fixed
+    q2 = point(18 mm, 36 mm) fixed
+    k1 = circle(center = q1, r = 2.75 mm)
+    k2 = circle(center = q2, r = 2.75 mm)
+    dim diameter(k1) = 5.5 mm
+    dim diameter(k2) = 5.5 mm
+  }
+  wall_holes = extrude(wall.region, symmetric(20 mm), into = floor_holes, op = cut)
+  requires mass(wall_holes, density = 2.7 g/cm^3) < 60 g, "R1 mass in 6061 aluminium"
+  requires bbox(wall_holes).x <= 60 mm, "R2 width"
+  requires bbox(wall_holes).z <= 50 mm, "R3 height"
+}

@@ -1,0 +1,20 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "apply_patch|Edit|Write",
+        "hooks": [{ "type": "command", "command": "\"${PLUGIN_ROOT}/hooks/opencad-hook\" guard-requirements --host codex", "timeout": 60 }]
+      },
+      {
+        "matcher": "mcp__opencad__(quote_request|order_prepare|mfg_dispatch)",
+        "hooks": [{ "type": "command", "command": "\"${PLUGIN_ROOT}/hooks/opencad-hook\" guard-external --host codex", "timeout": 60 }]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "apply_patch|Edit|Write",
+        "hooks": [{ "type": "command", "command": "\"${PLUGIN_ROOT}/hooks/opencad-hook\" build-reminder --host codex", "timeout": 60 }]
+      }
+    ]
+  }
+}

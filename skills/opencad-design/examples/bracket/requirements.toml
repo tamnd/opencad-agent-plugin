@@ -1,0 +1,24 @@
+# The requirements of the wall bracket. Each one has a `requires` line in bracket.ocl.
+
+[R1]
+text = "Mass in 6061 aluminium, at 2.7 g/cm^3"
+max = "60 g"
+source = "user"
+
+[R2]
+text = "Width along the wall"
+max = "60 mm"
+source = "user"
+
+[R3]
+text = "Height on the wall"
+max = "50 mm"
+source = "user"
+
+[R4]
+text = "Wall thickness for an M5 screw"
+min = "3 mm"
+source = "assumption A1"
+
+[assumptions]
+A1 = "The bracket hangs on two M5 screws and carries two M5 screws, so each hole is 5.5 mm, the ISO 273 medium clearance."

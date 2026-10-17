@@ -1,0 +1,18 @@
+{
+  "mcpServers": {
+    "opencad": {
+      "command": "sh",
+      "args": [
+        "-c",
+        "for d in \"${CODEX_HOME:-$HOME/.codex}\"/plugins/cache/*/opencad/0.8.4; do [ -x \"$d/bin/opencad-launch\" ] && exec \"$d/bin/opencad-launch\" \"$@\"; done; echo 'opencad-launch: Codex has no copy of the plugin opencad 0.8.4. Install it again with codex plugin add opencad@opencad' >&2; exit 1",
+        "opencad-launch",
+        "mcp",
+        "--project",
+        "."
+      ],
+      "env_vars": ["CODEX_HOME", "OPENCAD_BIN", "OPENCAD_RELEASES", "XDG_CACHE_HOME"],
+      "startup_timeout_sec": 30,
+      "tool_timeout_sec": 600
+    }
+  }
+}
