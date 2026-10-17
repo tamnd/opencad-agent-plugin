@@ -2,6 +2,24 @@
 
 Every release gets a section here, written by hand, and the release workflow publishes that section as the release notes. The version is the workspace version in `Cargo.toml`, and a tag that has no section here does not become a release.
 
+## 0.8.5
+
+This patch includes 14 PRs merged since v0.8.4 across the MCP server, the agent plugin, the release, the bench, the documents and Part Design.
+
+- The new command `opencadd hook` runs the hooks of the agent plugin. `guard-requirements` asks the person before an edit removes or loosens a requirement, `build-reminder` asks the agent to build after an edit of an OCL file, and `guard-external` asks before a quote, an order or a dispatch to a shop (MW26, #2700).
+- The agent plugin for Claude Code and Codex is in `plugin/`. It gives the MCP server, the two skills and the three hooks in one install. Its launcher finds `opencadd`, or downloads the release binary and checks its SHA-256. `cargo xtask plugin` puts the tree of `tamnd/opencad-agent-plugin` together (MW26, #2702).
+- A release now has one MCPB bundle of the MCP server for each platform, for Claude Desktop. `opencadd mcp --project` with an empty value stops with an error, and does not serve the current folder of the host (MW27, #2704).
+- A release now has the CycloneDX SBOMs of `opencadd` and of the desktop app. A new job builds the Linux x86-64 binary again and compares it byte for byte (MW27, #2705).
+- `server.json` is the entry of the server in the official MCP registry, `io.github.tamnd/opencad`, and the release publishes it (MW28, #2706).
+- The bench has 25 assembly tasks of family A, from a planetary gearbox to a scissor lift. The grader has the new checks `assembly`, `interference` and `motion`, and a `motion` check with `collides = true` passes only when a stop holds the part (MW29, #2707, #2709, #2710 and the tasks A-018 to A-025).
+- `asm_motion` holds each free motion that the drive does not set, at its value where the assembly starts. A sweep of the elbow of an arm turns only the forearm (#2712).
+- The tab of a modified document shows `*`, and Close, Close All and Exit ask to save it with the "Unsaved Document" box of FreeCAD 1.1.4 (DOC-W08, #2711).
+- A Part Design feature opens its task panel again from the model tree. Double-click it, or select it and press Enter (PD-W15, #2699).
+- The 16 Part Design primitive panels open with the sizes of FreeCAD 1.1.4. A subtractive primitive in a body with no solid and a wedge with a length of 0 give the texts of FreeCAD (PD-W09, #2701).
+- The Hole panel has the 10 thread tables and the 11 head tables of FreeCAD 1.1.4, and the core refuses a bad hole with the texts of FreeCAD. The Draft panel opens with an angle of 1.5 deg (PD-W08, #2708).
+
+The MCP server gives 14 tools, about 5,266 tokens for the model, as in 0.8.4. The hash of the default tool list is `b3:0d2e9ff87879ce86e034a7d1a6402d31fe60400175d99a046351894114701524`.
+
 ## 0.8.4
 
 This patch includes five PRs merged since v0.8.3 across the MCP server, the test tools and the Forge kernel.

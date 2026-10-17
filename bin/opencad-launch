@@ -10,7 +10,7 @@
 # Each error is one line on stderr and the exit code 1, so the host shows a useful message.
 # OPENCAD_RELEASES changes the address of the releases, for a mirror of an air-gapped site.
 set -eu
-version="0.8.4"
+version="0.8.5"
 fail() {
 	printf 'opencad-launch: %s\n' "$1" >&2
 	exit 1
