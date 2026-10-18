@@ -2,6 +2,19 @@
 
 Every release gets a section here, written by hand, and the release workflow publishes that section as the release notes. The version is the workspace version in `Cargo.toml`, and a tag that has no section here does not become a release.
 
+## 0.8.6
+
+This patch includes six PRs merged since v0.8.5 across the release, the agent plugin, the MCP server, the bench and Part Design.
+
+- The release archives of `opencadd` for Linux and macOS have the OCCT kernel, so `opencadd build` and `model_build` make solids with a binary from the release page. The OCCT libraries are in `lib` next to the binary. The Linux builds are for glibc 2.35 or later, with the targets `x86_64-unknown-linux-gnu` and `aarch64-unknown-linux-gnu`. Windows keeps its binary without the kernel (#2703, #2717).
+- The launcher of the agent plugin downloads the release archive, checks its SHA-256 before it unpacks it, and checks the binary in the cache each time it runs. The MCPB bundles for Linux and macOS have the OCCT libraries in `server/lib` (#2703, #2719).
+- The interference check of `asm_solve` and of `model_check` finds the pairs that touch with the distance of OCCT, so the checks of the bolted joint of the tests take 82 ms in a debug build, where they took more than 50 s. A screw in a hex nut of its size on its axis is the verdict `thread` in `asm_solve` and the info finding `interference.thread` in `model_check`, not an overlap (#2696, #2722).
+- The bench has a weekly run of the MCP Bench in Claude Code and in Codex, with a report of the pass rate of each family for each host. `bench/run.py` has the new options `--family`, `--shard` and `--report` (MW29, #2716).
+- The list of Multi-Transform has the context menu of FreeCAD, with the Scale step and the modes Extent and Spacing. Multi-Transform on a selected pattern or mirror turns it into a multi-transform in its place (PD-W10, #2720).
+- A Shape Binder or a Sub-Shape Binder goes into the active body, as in FreeCAD. The Part Design steps of the journeys are in a body, and a Part Design command that makes the body active opens its panel in the same frame (#1448, #2718).
+
+The MCP server gives 14 tools, about 5,266 tokens for the model, as in 0.8.5. The hash of the default tool list is `b3:41ea31ef52bee4004024f274dc22556baf1ce46f358ad949d8013469981427a9`, because the output schema of `asm_solve` lists the verdict `thread`.
+
 ## 0.8.5
 
 This patch includes 14 PRs merged since v0.8.4 across the MCP server, the agent plugin, the release, the bench, the documents and Part Design.

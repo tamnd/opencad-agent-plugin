@@ -1,6 +1,6 @@
 {
   "name": "opencad",
-  "version": "0.8.5",
+  "version": "0.8.6",
   "description": "Parametric CAD for agents. The OpenCAD MCP server builds, checks, renders and measures OCL models, and the skills give the procedure to design a part or an assembly.",
   "author": {
     "name": "OpenCAD",

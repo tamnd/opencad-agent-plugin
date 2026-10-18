@@ -1,2 +1,2 @@
-# The SHA-256 of each release binary of opencadd that this plugin can run, in the format of
+# The SHA-256 of each release archive of opencadd that this plugin can run, in the format of
 # sha256sum. `cargo xtask plugin --sums SHA256SUMS` writes the lines from the files of the release.
