@@ -2,6 +2,17 @@
 
 Every release gets a section here, written by hand, and the release workflow publishes that section as the release notes. The version is the workspace version in `Cargo.toml`, and a tag that has no section here does not become a release.
 
+## 0.8.7
+
+This patch includes four PRs merged since v0.8.6 across the MCP server, the file formats and Part Design.
+
+- The MCP tool `export` takes `format: "3mf"` and the new argument `material`, such as `PLA`. The 3MF file has each part as a mesh in millimetres with its name and the colors of its faces, one base material for each color, and the model on the build plate at z = 0. `opencadd export --material`, `opencadd build --export x.3mf` and `opencadd mesh` read and write `.3mf` too (MW30, #2725).
+- The MCP tool `export` takes `format: "dxf"` and writes the flat pattern of a `sheet_unfold_sketch` as a DXF file of release 12. The outline, the holes and the relief cuts are on the layer `CUT`, each bend line with a text such as `UP 90` is on `BEND`, and the bend labels are on `ETCH`. The export reads the file back and checks the area against the area of the flat face. FreeCAD 1.1.4 opens the flat pattern of the new enclosure cover at its size (MW30, #2727).
+- The References list of the Shape Binder panel has Add Geometry and Remove Geometry, so a click on a face of the body adds it or takes it out. `part.shape_binder` takes the new `at` with a point on each face (PD-T090, #2724).
+- A Sub-Shape Binder has BindMode with `synchronized`, `frozen` and `detached`, as in FreeCAD 1.1.4. Its tree menu has Synchronize and Select Bound Object, and undo after Synchronize gives the old shape back (PD-T091, #2726).
+
+The MCP server gives 14 tools, about 5,499 tokens for the model, where 0.8.6 gave about 5,266. The hash of the default tool list is `b3:a3702359fa72adae2425b070a119c6043edda8cf3f5928d407ff12f3d1379e4b`, because the tool `export` has the formats `3mf` and `dxf`, the argument `material` and the output `flat_pattern`.
+
 ## 0.8.6
 
 This patch includes six PRs merged since v0.8.5 across the release, the agent plugin, the MCP server, the bench and Part Design.
